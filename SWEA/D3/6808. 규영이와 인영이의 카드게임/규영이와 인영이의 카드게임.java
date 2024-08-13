@@ -1,6 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -15,8 +15,8 @@ public class Solution {
 		T = Integer.parseInt(bf.readLine());
 		for (int tc = 1; tc <= T; tc++) {
 			// 카드 준비
-			player1 = new LinkedList<Integer>();
-			player2 = new LinkedList<Integer>();
+			player1 = new ArrayList<Integer>();
+			player2 = new ArrayList<Integer>();
 
 			isSelected = new boolean[9];
 			winCnt = 0;
@@ -57,11 +57,13 @@ public class Solution {
 
 			isSelected[i] = true;
 
-			if(player1.get(cnt) > player2.get(i)) {
-				startGame(cnt + 1, totalP1 + player1.get(cnt) + player2.get(i) , totalP2);
+			int p1 = player1.get(cnt);
+			int p2 = player2.get(i);
+			if(p1 > p2) {
+				startGame(cnt + 1, totalP1 + p1 + p2 , totalP2);
 			}
-			if(player1.get(cnt) < player2.get(i)) {
-				startGame(cnt + 1, totalP1 , totalP2 + player1.get(cnt) + player2.get(i));
+			if(p1 < p2) {
+				startGame(cnt + 1, totalP1 , totalP2 + p1 + p2);
 			}
 
 			isSelected[i] = false;
