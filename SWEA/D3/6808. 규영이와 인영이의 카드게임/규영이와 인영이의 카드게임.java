@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -9,9 +8,7 @@ public class Solution {
 	static int T, winCnt, loseCnt;
 	static List<Integer> player1; // 규영이 - 고정값
 	static List<Integer> player2; // 인영이
-	static int[] p2Nums; // 점수판
 	static boolean[] isSelected;
-//	static int totalP1, totalP2;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -20,7 +17,6 @@ public class Solution {
 			// 카드 준비
 			player1 = new LinkedList<Integer>();
 			player2 = new LinkedList<Integer>();
-			p2Nums = new int[9];
 
 			isSelected = new boolean[9];
 			winCnt = 0;
