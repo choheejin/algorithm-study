@@ -1,0 +1,74 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class Solution {
+	static int T, winCnt, loseCnt;
+	static List<Integer> player1; // 규영이 - 고정값
+	static List<Integer> player2; // 인영이
+	static int[] p2Nums; // 점수판
+	static boolean[] isSelected;
+//	static int totalP1, totalP2;
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		T = Integer.parseInt(bf.readLine());
+		for (int tc = 1; tc <= T; tc++) {
+			// 카드 준비
+			player1 = new LinkedList<Integer>();
+			player2 = new LinkedList<Integer>();
+			p2Nums = new int[9];
+
+			isSelected = new boolean[9];
+			winCnt = 0;
+			loseCnt = 0;
+
+			StringTokenizer st = new StringTokenizer(bf.readLine());
+			for (int i = 0; i < 9; i++) {
+				player1.add(Integer.parseInt(st.nextToken()));
+			}
+			for (int i = 1; i <= 18; i++) {
+				if (player1.contains(i))
+					continue;
+				player2.add(i);
+			}
+			startGame(0, 0, 0);
+			System.out.printf("#%d %d %d\n", tc, winCnt, loseCnt);
+		}
+	}
+
+	// cnt: 현재 라운드
+	public static void startGame(int cnt, int totalP1, int totalP2) {
+		// 순열 생성의 종료
+		if (cnt == 9) {
+			if(totalP1 > totalP2) {
+				winCnt++;
+			}
+			if(totalP1 < totalP2) {
+				loseCnt++;
+			}
+			return;
+		}
+
+		// p2의 카드에서 순열 뽑기
+		for (int i = 0; i < player2.size(); i++) {
+			// 이미 뽑힌 수 일 때는 지나친다.
+			if (isSelected[i])
+				continue;
+
+			isSelected[i] = true;
+
+			if(player1.get(cnt) > player2.get(i)) {
+				startGame(cnt + 1, totalP1 + player1.get(cnt) + player2.get(i) , totalP2);
+			}
+			if(player1.get(cnt) < player2.get(i)) {
+				startGame(cnt + 1, totalP1 , totalP2 + player1.get(cnt) + player2.get(i));
+			}
+
+			isSelected[i] = false;
+		}
+	}
+}
