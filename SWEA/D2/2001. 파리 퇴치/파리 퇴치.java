@@ -3,8 +3,6 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 /***
- * 메모리: 86,160 KB, 시간: 576 ms, 코드길이: 1,425 Bytes
- * @author 조희진
  *
  */
 
@@ -49,5 +47,6 @@ public class Solution {
 			maxTotal = total;
 		check(x + 1, y);
 		check(x, y + 1);
+
 	}
 }
