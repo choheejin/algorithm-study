@@ -2,6 +2,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/***
+ * 메모리: 86,160 KB, 시간: 576 ms, 코드길이: 1,425 Bytes
+ * @author 조희진
+ *
+ */
+
 public class Solution {
 
 	static int T, N, M, maxTotal;
@@ -32,23 +38,16 @@ public class Solution {
 
 	private static void check(int x, int y) {
 		int total = 0;
-		int[][] map = new int[M][M];
-		int cntX = 0;
 		for (int i = x; i < x + M; i++) {
-			int cntY = 0;
 			for (int j = y; j < y + M; j++) {
 				if (i >= N || j >= N)
 					return;
 				total += graph[i][j];
-				map[cntX][cntY] = graph[i][j];
-				cntY++;
 			}
-			cntX++;
 		}
 		if (maxTotal < total)
 			maxTotal = total;
 		check(x + 1, y);
 		check(x, y + 1);
-
 	}
 }
