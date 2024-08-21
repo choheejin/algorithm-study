@@ -3,10 +3,14 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+/*
+** 메모리: 156828 KB, 시간: 2960 ms
+*/
+
 public class Main {
     // 제자리 원 위치는 (N-1) * 4 번 회전
     static int[] dx = {1, 0, -1, 0}, dy ={0, -1, 0, 1};
-    static int N, M, R;
+    static int N, M, R, callCnt;
     static int[][] graph;
     public static void main(String[] args) throws Exception {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
@@ -28,10 +32,15 @@ public class Main {
             rotate(i, i, N - i*2, M- i*2, R % ((N- i*2+ M- i*2) * 2 - 4));
 //            print();
         }
-
-//        rotateI(1,1, N-2, M-2, R % ((N-2+ M-2) * 2));
-//        rotateO(0 , 0, N, M , R % ((N+ M) * 2 - 4));
-        print();
+//        System.out.println(callCnt);
+		StringBuilder sb = new StringBuilder();
+		for(int i=0;i<N;i++) {
+			for(int j=0;j<M;j++) {
+				sb.append(graph[i][j]).append(' ');
+			}
+			sb.append('\n');
+		}
+		System.out.println(sb);
     }
 
     private static void rotate(int s, int e, int n, int m, int r) {
@@ -40,12 +49,17 @@ public class Main {
             int idx = 0;
             int tmp = graph[x][y];
             // 한바퀴 돌려지는 수는 (N + M) * 2 - 4;
-            for(int i = 0; i < (n + m) * 2 - 4; i++) {
+            int limit = (n + m) * 2 - 4;
+            for(int i = 0; i < limit; i++) {
 //                System.out.printf("%d %d\n", x, y);
-                if(x == s && y == e) idx = 0;
-                if(x == s && y == e + m - 1) idx = 1;
-                if(x == s + n - 1 && y == e + m-1) idx = 2;
-                if(x == s + n - 1 && y == e) idx = 3;
+                if(x == s) {
+                	if(y == e) idx = 0;
+                	else if(y == e + m - 1) idx=1;
+                }
+                else if(x == s + n - 1) {
+                	if( y == e + m-1) idx=2;
+                	else if(y == e) idx = 3;
+                }
                 int nx = dx[idx] + x, ny = dy[idx] + y;
                 int a = graph[nx][ny];
                 graph[nx][ny] = tmp;
@@ -53,54 +67,11 @@ public class Main {
                 x = nx;
                 y = ny;
 //                print();
+                callCnt++;
             }
             r--;
         }
     }
-
-
-    private static void rotateO(int x, int y, int n, int m, int r) {
-        while(r > 0) {
-            int idx = 0;
-            int tmp = graph[x][y];
-            // 한바퀴 돌려지는 수는 (N + M) * 2 - 4;
-            for(int i = 0; i < (n + m) * 2 - 4; i++) {
-                if(x == 0 && y == 0) idx = 0;
-                if(x == 0 && y == m-1) idx = 1;
-                if(x == n-1 && y == m-1) idx = 2;
-                if(x == n-1 && y == 0) idx = 3;
-                int nx = dx[idx] + x, ny = dy[idx] + y;
-                int a = graph[nx][ny];
-                graph[nx][ny] = tmp;
-                tmp = a;
-                x = nx;
-                y = ny;
-            }
-            r--;
-        }
-    }
-
-    private static void rotateI(int x, int y, int n, int m, int r) {
-        while(r > 0) {
-            int idx = 0;
-            int tmp = graph[x][y];
-            // 한바퀴 돌려지는 수는 (N + M) * 2 - 4;
-            for(int i = 0; i < (n + m) * 2 - 4; i++) {
-                if(x == 1 && y == 1) idx = 0;
-                if(x == 1 && y == m) idx = 1;
-                if(x == n && y == m) idx = 2;
-                if(x == n && y == 1) idx = 3;
-                int nx = dx[idx] + x, ny = dy[idx] + y;
-                int a = graph[nx][ny];
-                graph[nx][ny] = tmp;
-                tmp = a;
-                x = nx;
-                y = ny;
-            }
-            r--;
-        }
-    }
-
 
     private static void print() {
         for(int i = 0; i < N; i++) {
