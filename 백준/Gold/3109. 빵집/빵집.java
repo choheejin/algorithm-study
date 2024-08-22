@@ -1,60 +1,58 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
-
+// 풀고보니 강사님과 풀이가 똑같네요.
+//매모리 : 40012	 시간 : 360
 public class Main {
-	static int N, M, maxValue, cnt=0;
-	static boolean[][] visited;
-	static char[][] graph;
-	static int[] dx = {-1, 0, 1}, dy = {1, 1, 1}; 
-	public static void main(String[] args) throws Exception{
-		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(bf.readLine());
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		graph = new char[N][M];
-		for(int i = 0; i < N; i++) {
-			graph[i] = bf.readLine().toCharArray();
-		}
-		
-		visited = new boolean[N][M];
-		for(int i = 0; i < N; i++) {
-			// 출발지에서 도착지에 도착할 수 있다
-			visited[i][0] = true;
-			if(makeRoute(i, 0)) {
-				// 현재 도달한 개수
-				cnt++;
-			}
-		}
-		System.out.println(cnt);
-		// 한점의 makeRoute()를 하면 3개의 경로 확인
-	}
+    static int R, C;
+    static char[][] map;
+    static boolean[][] visit;
+    static int[] dx = {-1, 0, 1};// 위 중앙 아래
+    static int[] dy = {1, 1, 1};
+    static int max = 0;
 
-	/**
-	 * 
-	 * @param x
-	 * @param y
-	 * @return (x,y) 좌표 기준으로 파이프설치를 시도했을 때, 성공여부 반환
-	 */
-	static boolean makeRoute(int x, int y) {
-		if(y == M-1) return true;
-		
-		for(int i = 0; i < 3; i++) {
-			int nx = dx[i] + x;
-			int ny = dy[i] + y;
-			
-			// 더이상 갈 곳이 없음
-			if(nx < 0 || ny < 0 || nx >= N || ny >= M) continue;
-			if(visited[nx][ny]) continue;
-			if(graph[nx][ny] == 'x') continue;
+    //오른쪽, 오른쪽 위 대각선, 오른쪽 아래 대각선으로 연결할 수 있고
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-			
-			visited[x][y] = true;
-			if(makeRoute(nx, ny)) return true;
-			
-		}
-		
-		return false;
-	}
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
+        map = new char[R][C];
+        visit = new boolean[R][C];
 
+        //'.'는 빈 칸이고, 'x'는 건물
+        for (int i = 0; i < R; i++) {
+            String line = br.readLine();
+            for (int j = 0; j < C; j++) {
+                map[i][j] = line.charAt(j);
+            }
+        }
+
+        for (int i = 0; i < R; i++) {
+            // 파이프가 끝까지 연결된 경우
+            if (makePipe(i, 0)) {
+                max++;
+            }
+        }
+        System.out.println(max);
+    }
+
+    private static boolean makePipe(int x, int y) {
+        visit[x][y] = true;
+
+        for (int i = 0; i < 3; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            if (nx < 0 || nx >= R || ny < 0 || ny >= C) continue;
+            if (map[nx][ny] == 'x') continue;
+            if (visit[nx][ny]) continue;
+
+            if (ny == C - 1) { // 파이프가 매트릭스의 마지막 열까지 도달했는지 확인.
+                return true; // 도달하면 true 반환.
+            }
+            if (makePipe(nx, ny)) return true; // 재귀적으로 다음 위치에서 파이프를 설치 가능한지 확인.
+        }
+        return false;
+    }
 }
