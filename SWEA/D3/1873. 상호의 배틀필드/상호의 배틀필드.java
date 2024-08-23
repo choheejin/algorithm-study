@@ -3,6 +3,12 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+/***
+ * 메모리: 21,708 KB, 시간: 122 ms, 코드길이: 3,444 Bytes
+ * @author SSAFY
+ *
+ */
+
 public class Solution {
 	// 입력값
 	static int H, W, N;
@@ -22,22 +28,18 @@ public class Solution {
 			StringTokenizer st = new StringTokenizer(bf.readLine());
 			H = Integer.parseInt(st.nextToken());
 			W = Integer.parseInt(st.nextToken());
-			map = new char[H][];
-			boolean isFound = false;
+			map = new char[H][W];
 			for (int h = 0; h < H; h++) {
-				map[h] = bf.readLine().toCharArray();
-				if(!isFound) {
-					for (int w = 0; w < W; w++) {
-						if(map[h][w] == '^' || map[h][w] == 'v' || map[h][w] == '<' || map[h][w] == '>') {
-							tankX = h;
-							tankY = w;
-							if(map[h][w] == '^') currDir = 0;
-							else if(map[h][w] == 'v') currDir = 1;
-							else if(map[h][w] == '<') currDir = 2;
-							else if(map[h][w] == '>') currDir = 3;
-							isFound = true;
-							break;
-						}
+				String inputs = bf.readLine();
+				for (int w = 0; w < W; w++) {
+					map[h][w] = inputs.charAt(w);
+					if(map[h][w] == '^' || map[h][w] == 'v' || map[h][w] == '<' || map[h][w] == '>') {
+						tankX = h;
+						tankY = w;
+						if(map[h][w] == '^') currDir = 0;
+						else if(map[h][w] == 'v') currDir = 1;
+						else if(map[h][w] == '<') currDir = 2;
+						else if(map[h][w] == '>') currDir = 3;
 					}
 				}
 			}
@@ -45,7 +47,6 @@ public class Solution {
 			N = Integer.parseInt(bf.readLine());
 			cmds = bf.readLine().toCharArray();
 			for(char cmd: cmds) {
-//				System.out.println(cmd);
 				switch (cmd) {
 				case 'U':
 					moveTank(0);
@@ -60,11 +61,9 @@ public class Solution {
 					moveTank(3);
 					break;
 				case 'S':
-//					System.out.printf("%d %d\n",tankX, tankY);
 					shoot(tankX + dx[currDir], tankY + dy[currDir], currDir);
 					break;
 				}
-//				System.out.println(printMap());
 			}
 			
 			sb.append("#").append(tc).append(" ");
@@ -82,7 +81,6 @@ public class Solution {
 	// 1. 이동
 	// 현재 전차의 방향을 변경해준다.
 	static void moveTank(int idx) {
-//		System.out.printf("%d %d %d\n", tankX, tankY, idx);
 		map[tankX][tankY] = tankShape[idx];
 		int moveX = tankX + dx[idx], moveY = tankY + dy[idx];
 		currDir = idx;
@@ -95,11 +93,13 @@ public class Solution {
 			map[tankX][tankY] = tankShape[idx];
 		}
 	}
+	
 	// 현재 전차가 바라보는 방향의 바로 상/하/좌/우에 평지가 존재하는지 확인한다.
 	static boolean isFlat(int x, int y) {
 		return map[x][y] == '.';
 	}
 	
+	// 평지로 만들어준다.
 	static void makeFlat(int x, int y) {
 		map[x][y] = '.';
 	}
@@ -108,24 +108,22 @@ public class Solution {
 	// 전차의 방향의 상/하/좌/우 를 직진방향으로 탐색을 진행
 	// 밖으로 나갈때까지 계속해서 진행해야 함.
 	static void shoot(int x, int y, int idx) {
-		// 포탄이 맵 밖으로 벗어났다.
-		if(x < 0 || y < 0 || x >= H || y >= W) return;
-//		System.out.printf("%d %d %d\n", x, y, idx);
-		if(!isFlat(x, y) && getObstacleType(x, y) == 2) {
-			return;
+		int s = x, e = y;
+		while(true) {
+			if(s < 0 || e < 0 || s >= H || e >= W) break;
+			if(!isFlat(s, e) && getObstacleType(s, e) == 1) {
+				makeFlat(s, e);
+				break;
+			}
+			if(!isFlat(s, e) && getObstacleType(s, e) == 2) break;
+			
+			s = s + dx[idx];
+			e = e + dy[idx];
 		}
-		
-		else if(!isFlat(x, y) && getObstacleType(x, y) == 1) {
-			// 평지로 전환
-			makeFlat(x, y);
-			return;
-		}
-		
-		shoot(x + dx[idx], y + dy[idx], idx);
 	}
 	
-	// 방해물 - 강철(2): return;
 	// 방해물 - 벽돌(1): 평지로 전환;
+	// 방해물 - 강철(2): return;
 	static int getObstacleType(int x, int y) {
 		if(map[x][y] == '*') {
 			return 1;
