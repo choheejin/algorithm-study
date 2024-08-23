@@ -68,12 +68,10 @@ public class Solution {
 			
 			sb.append("#").append(tc).append(" ");
 			
-			for(int h = 0; h < H; h++) {
-				for(int w = 0; w < W; w++) {
-					sb.append(map[h][w]);
-				}
-				sb.append("\n");
-			}
+			for(int i=0; i<H; i++) {
+                sb.append(String.valueOf(map[i])).append("\n");
+            }
+
 		}
 		System.out.println(sb);
 	}
