@@ -1,61 +1,65 @@
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
-
-    public static void dfs(List<List<Integer>> graph, int v, boolean[] visited) {
-        visited[v] = true;
-        System.out.print(v + " ");
-        for (int i : graph.get(v)) {
-            if (!visited[i]) {
-                dfs(graph, i, visited);
-            }
-        }
-    }
-
-    public static void bfs(List<List<Integer>> graph, int start, boolean[] visited) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(start);
-        visited[start] = true;
-        
-        while (!queue.isEmpty()) {
-            int v = queue.poll();
-            System.out.print(v + " ");
-            for (int i : graph.get(v)) {
-                if (!visited[i]) {
-                    queue.add(i);
-                    visited[i] = true;
-                }
-            }
-        }
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt(); // Number of nodes
-        int m = sc.nextInt(); // Number of edges
-        int v = sc.nextInt(); // Starting node
-        
-        List<List<Integer>> graph = new ArrayList<>();
-        for (int i = 0; i <= n; i++) {
-            graph.add(new ArrayList<>());
-        }
-        
-        boolean[] visitedDfs = new boolean[n + 1];
-        boolean[] visitedBfs = new boolean[n + 1];
-        
-        for (int i = 0; i < m; i++) {
-            int x = sc.nextInt();
-            int y = sc.nextInt();
-            graph.get(x).add(y);
-            graph.get(y).add(x);
-        }
-        
-        for (int i = 1; i <= n; i++) {
-            Collections.sort(graph.get(i));
-        }
-        
-        dfs(graph, v, visitedDfs);
-        System.out.println();
-        bfs(graph, v, visitedBfs);
-    }
+	static int N, M, V;
+	static int[][] adjMatrix;
+	static boolean[] visited;
+	static StringBuilder sb;
+	
+	public static void main(String[] args) throws Exception {
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(bf.readLine());
+		sb = new StringBuilder();
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		V = Integer.parseInt(st.nextToken());
+		
+		adjMatrix = new int[N+1][N+1];
+		
+		for(int m = 0; m < M; m++) {
+			st = new StringTokenizer(bf.readLine());
+			int from = Integer.parseInt(st.nextToken());
+			int to = Integer.parseInt(st.nextToken());
+			adjMatrix[from][to] = adjMatrix[to][from] = 1;
+		}
+		
+		visited = new boolean[N+1];
+		dfs(V);
+		sb.append("\n");
+		visited = new boolean[N+1];
+		bfs(V);
+		System.out.println(sb);
+	}
+	
+	static void dfs(int from) {
+		visited[from] = true;
+		sb.append(from).append(" ");
+		
+		for(int v = 0; v <=N; v++) {
+			if(!visited[v] && adjMatrix[from][v] == 1) {
+				dfs(v);
+			}
+		}
+	}
+	
+	static void bfs(int start) {
+		ArrayDeque<Integer> deque = new ArrayDeque<>();
+		deque.offer(start);
+		sb.append(start).append(" ");
+		visited[start] = true; 
+		while(!deque.isEmpty()) {
+			int from = deque.poll();
+			for(int v = 0; v <=N; v++) {
+				if(!visited[v] && adjMatrix[from][v] == 1) {
+					sb.append(v).append(" ");
+					visited[v] = true; 
+					deque.offer(v);
+				}
+			}
+		}
+	}
 }
