@@ -4,9 +4,8 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-	// 조합
+	// 중복없는 조합 문제
 	static int L, C;
-	static char[] vowels = {'a', 'e', 'i', 'o', 'u'};
 	static char[] alpha, selectedAlpha;
 	static StringBuilder sb = new StringBuilder();
 	
