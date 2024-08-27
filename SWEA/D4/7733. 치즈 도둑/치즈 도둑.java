@@ -14,6 +14,7 @@ public class Solution {
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(bf.readLine());
 		for(int tc = 1; tc <= T; tc++) {
+			int limit = 0;
 			N = Integer.parseInt(bf.readLine());
 			adjMatrix = new int[N][N];
 			
@@ -21,11 +22,12 @@ public class Solution {
 				StringTokenizer st = new StringTokenizer(bf.readLine());
 				for(int j = 0; j < N; j++) {
 					adjMatrix[i][j] = Integer.parseInt(st.nextToken());
+					limit = Math.max(limit, adjMatrix[i][j]);
 				}
 			}
 			
 			int maxValue = 0;
-			for(int t = 0; t <= 100; t++) {
+			for(int t = 0; t <= limit; t++) {
 				int cnt = 0;
 				visited = new boolean[N][N];
 				if(t != 0) {
@@ -51,6 +53,7 @@ public class Solution {
 		System.out.println(sb);
 	}
 	
+	// 방문체크를 해주므로 시간 복잡도는 O(V)이다.
 	static boolean dfs(int x, int y) {
 		if(x < 0 || y < 0 || x >= N || y >= N) return false;		
 		
