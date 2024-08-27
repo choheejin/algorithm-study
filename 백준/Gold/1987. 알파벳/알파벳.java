@@ -5,7 +5,6 @@ import java.util.StringTokenizer;
 public class Main {
 	static int R, C, maxResult;
 	static boolean[] alpha;
-	static boolean[][] visited;
 	static char[][] adjMatrix;
 	
 	public static void main(String[] args) throws Exception {
@@ -13,7 +12,6 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(bf.readLine());
 		R = Integer.parseInt(st.nextToken());
 		C = Integer.parseInt(st.nextToken());
-		visited = new boolean[R][C];
 		alpha = new boolean['Z'+1];
 		adjMatrix = new char[R][];
 		for(int r = 0; r < R; r++) {
@@ -26,12 +24,10 @@ public class Main {
 	
 	static void dfs(int x, int y, int currCnt) {
 		if(x < 0 || y < 0 || x >= R || y >= C) return;
-		if(visited[x][y]) return;
 		if(alpha[adjMatrix[x][y]]) return;
 		
 		
 		
-		visited[x][y] = true;
 		alpha[adjMatrix[x][y]] = true;
 		maxResult = Math.max(maxResult, currCnt);
 		
@@ -39,8 +35,7 @@ public class Main {
 		dfs(x - 1, y, currCnt + 1);
 		dfs(x, y + 1, currCnt + 1);
 		dfs(x, y - 1, currCnt + 1);
-		
-		visited[x][y] = false;
+
 		alpha[adjMatrix[x][y]] = false;
 	}
 }
