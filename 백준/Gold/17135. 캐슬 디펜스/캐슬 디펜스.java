@@ -2,10 +2,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
+/**
+ * 메모리: 35712 KB, 시간: 196 ms
+ */
+
 public class Main {
     //1. 조합을 통해서 궁수의 위치를 선정해준다.
-    //2. N-1 행부터 0행까지 쏠 수 있는 적을 확인한다.
-        //-1. 왼쪽 궁수부터 쏠 적 하나만 쏘기
+    //2. 왼쪽 궁수부터 쏠 적 하나만 쏘기 (BFS를 통해 궁수와 적의 최단 거리를 구할 수 있다.)
     //3. 적들의 칸을 이동시켜준다.
     //4. N만큼 반복해준다 (남은 적들의 수로 최적화 가능할 듯)
 
@@ -121,12 +124,5 @@ public class Main {
             copyMatrix[x][y] = 0;
             shootCnt++;
         }
-    }
-
-    static void print() {
-        for(int i = 0; i < N; i++) {
-            System.out.println(Arrays.toString(adjMatrix[i]));
-        }
-        System.out.println("=======");
     }
 }
