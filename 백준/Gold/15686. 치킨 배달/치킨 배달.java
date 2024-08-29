@@ -2,6 +2,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/**
+ * 메모리: 16268 KB, 시간: 160 ms
+ */
+
 public class Main {
     // 조합 문제
     // 최악의 경우의 수: 13 C 7 = 1716
@@ -93,12 +97,12 @@ public class Main {
         for(int c = 0; c < customerIdx; c++) {
             Customer customer = customers[c];
             for(int s = 0; s < M; s++) {
-                int distance = customer.getDistance(selectedShops[s]);
-                customer.setMinDistance(distance);
+                customer.setMinDistance(customer.getDistance(selectedShops[s]));
             }
         }
 
         int result = 0;
+        
         for(int i = 0; i < customerIdx; i++) {
             result += customers[i].minDistance;
             customers[i].minDistance = Integer.MAX_VALUE;
