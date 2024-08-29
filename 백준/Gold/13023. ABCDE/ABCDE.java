@@ -38,8 +38,9 @@ public class Main {
         }
 
         int result = 0;
+        visited = new boolean[N];
+
         for(int from = 0; from < N; from++) {
-            visited = new boolean[N];
             if(dfs(from, 1)) {
                 result = 1;
                 break;
