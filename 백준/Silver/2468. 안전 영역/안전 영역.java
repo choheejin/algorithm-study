@@ -37,16 +37,14 @@ public class Main {
     static boolean dfs(int x, int y, int target) {
         if(x < 0 || y < 0 || x >= N || y >= N) return false;
         if(visited[x][y]) return false;
+        if(map[x][y] <= target) return false;
 
         visited[x][y] = true;
-        if(map[x][y] > target) {
-            dfs(x + 1, y, target);
-            dfs(x - 1, y, target);
-            dfs(x, y + 1, target);
-            dfs(x , y - 1, target);
-            return true;
-        }
+        dfs(x + 1, y, target);
+        dfs(x - 1, y, target);
+        dfs(x, y + 1, target);
+        dfs(x , y - 1, target);
+        return true;
 
-        return false;
     }
 }
