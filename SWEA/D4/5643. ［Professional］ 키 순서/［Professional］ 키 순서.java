@@ -4,8 +4,13 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-
+/***
+ * 메모리: 93,396 KB, 시간: 2,045 ms, 코드길이: 2,403 Bytes
+ * @author SSAFY
+ *
+ */
 public class Solution {
+	static int cnt;
     static int N, M;
     static int[][] adjMatrix;
     public static void main(String[] args) throws Exception {
@@ -26,58 +31,40 @@ public class Solution {
                 int to = Integer.parseInt(st.nextToken());
                 adjMatrix[from][to] = 1;
             }
-
-            int cnt = 0;
-
+            
+            int result = 0;
             for(int i = 1; i <= N; i++) {
-                cnt += getTallPeople(i, adjMatrix) + getSmallPeople(i, adjMatrix) - 1 == N ? 1 : 0;
+            	cnt = 0;
+                getSmallPeople(i, new boolean[N + 1]);
+                getTallPeople(i, new boolean[N + 1]);
+                result += cnt-1 == N ? 1 : 0;
             }
 
-            sb.append("#").append(tc).append(" ").append(cnt).append("\n");
+            sb.append("#").append(tc).append(" ").append(result).append("\n");
         }
 
         System.out.println(sb);
     }
     
-    static int getTallPeople(int start, int[][] matrix) {
-        boolean[] visited = new boolean[N + 1];
-        Queue<Integer> q = new ArrayDeque<>();
-        int cnt = 0;
-
-        q.offer(start);
-        visited[start] = true;
-
-        while(!q.isEmpty()) {
-            int from = q.poll();
-            cnt++;
-            for(int i = 1; i <= N; i++) {
-                if(visited[i]) continue;
-                if(matrix[from][i] != 1) continue;
-                q.offer(i);
-                visited[i] = true;
-            }
+    static void getTallPeople(int from, boolean[] visited) {   	
+    	visited[from] = true;    	
+    	cnt++;
+    	for(int i = 1; i <= N; i++) {
+    		if(visited[i]) continue;
+        	if(adjMatrix[from][i] != 1) continue;
+        	getTallPeople(i, visited);
         }
-        return cnt;
+    	
     }
     
-    static int getSmallPeople(int start, int[][] matrix) {
-        boolean[] visited = new boolean[N + 1];
-        Queue<Integer> q = new ArrayDeque<>();
-        int cnt = 0;
-
-        q.offer(start);
-        visited[start] = true;
-
-        while(!q.isEmpty()) {
-            int to = q.poll();
-            cnt++;
-            for(int from = 1; from <= N; from++) {
-                if(visited[from]) continue;
-                if(matrix[from][to] != 1) continue;
-                q.offer(from);
-                visited[from] = true;
-            }
+    static void getSmallPeople(int from, boolean[] visited) {
+    	visited[from] = true;    	
+    	cnt++;
+    	for(int i = 1; i <= N; i++) {
+    		if(visited[i]) continue;
+        	if(adjMatrix[i][from] != 1) continue;
+        	getSmallPeople(i, visited);
         }
-        return cnt;
+    	
     }
 }
