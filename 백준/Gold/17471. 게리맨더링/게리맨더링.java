@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+/**
+ * 메모리: 15720 KB, 시간: 112 ms
+ */
 public class Main {
     // 문제 파악: 부분집합 + BFS 문제
 
@@ -77,8 +80,9 @@ public class Main {
             }
         
             int resultA = bfs(startA, choice, true);
+            if(resultA == -1) return;
             int resultB = bfs(startB, choice, false);
-            if( resultA == -1 || resultB == -1 ) return;
+            if(resultB == -1) return;
                 
 //            System.out.println(resultA + ", " + resultB);
             minValue = Math.min(minValue, Math.abs(resultA - resultB));
