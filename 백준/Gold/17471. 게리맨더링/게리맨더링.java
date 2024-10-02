@@ -79,9 +79,10 @@ public class Main {
                 }
             }
         
-            int resultA = bfs(startA, choice, true);
+            int resultA = bfs(startA, choice, true, cnt);
             if(resultA == -1) return;
-            int resultB = bfs(startB, choice, false);
+            
+            int resultB = bfs(startB, choice, false, N - cnt);
             if(resultB == -1) return;
                 
 //            System.out.println(resultA + ", " + resultB);
@@ -95,16 +96,19 @@ public class Main {
         make(idx + 1);
     }
 
-    public static int bfs(int start, boolean[] choice, boolean flag) {
+    public static int bfs(int start, boolean[] choice, boolean flag, int total) {
     	boolean[] visited = new boolean[N+1];
+    	int d = 0;
     	int cnt = 0;
+    	
         Queue<Integer> q = new ArrayDeque<>();
         q.offer(start);
         visited[start] = true;
 
         while (!q.isEmpty()) {
             int from = q.poll();
-            cnt += distance[from];
+            d += distance[from];
+            cnt++;
             for (Node n = arrList[from]; n != null; n = n.next) {
             	if(choice[n.to] != flag) continue;
                 if (visited[n.to])
@@ -114,10 +118,7 @@ public class Main {
             }
         }
         
-        for(int i = 1; i <= N; i++) {
-        	if(!visited[i] && choice[i] == flag) return -1;
-        }
         
-        return cnt;
+        return cnt == total ? d : -1;
     }
 }
