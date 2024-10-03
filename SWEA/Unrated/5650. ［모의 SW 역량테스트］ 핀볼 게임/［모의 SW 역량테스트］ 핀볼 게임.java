@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
+/**
+ * 메모리: 40,264 KB, 시간: 1,794 ms, 코드길이: 3,527 Bytes
+ */
 public class Solution {
 	static int[] dx = { -1, 1, 0, 0 }, dy = { 0, 0, -1, 1};
 	static int[][] blocks = {{}, {3, 1, 2, 0}, {0, 3, 2, 1}, {0, 2, 1, 3}, {2, 1, 0, 3}, { 0, 1, 2, 3 } };
@@ -71,16 +74,6 @@ public class Solution {
 		System.out.println(sb);
 	}
 
-	/**
-	 * 게임 종료 조건을 확인하는 함수이다.
-	 * 
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	public static boolean checkGameOver(int x, int y) {
-		return map[x][y] == -1 || (x == startPointX && y == startPointY);
-	}
 
 	public static int startGame(int startDir) {
 		int d = startDir;
@@ -97,16 +90,31 @@ public class Solution {
 			
 			// 벽인가?
 			if(x >= N || y >= N || x < 0 || y < 0) {
-				d = meetWall(x, y);
+				if(x < 0) d = 1;
+				
+				// 아래로 빠져 나감 
+				if(x >= N) d= 0;
+				
+				// 왼쪽으로 빠져 나감 
+				if(y < 0) d = 3;
+				
+				if(y >= N)d = 2;
+
 				cnt++;
 				continue;
 			}
 			
-			if(checkGameOver(x, y)) return cnt;
+			if(map[x][y] == -1 || (x == startPointX && y == startPointY)) return cnt;
 
 			// 블록인가?
 			else if(1 <= map[x][y] && map[x][y] <= 5) {
-				d = blocks[map[x][y]][getBlockPosition(x, y, px, py)];
+				int idx = 1;
+				int calX = px - x, calY = py - y;
+				if(calX == 0 && calY < 0) idx = 2;
+				if(calX == 0 && calY > 0) idx = 3;
+				if(calY == 0 && calX < 0) idx = 0;
+
+				d = blocks[map[x][y]][idx];
 				cnt++;
 				continue;
 			}
@@ -123,32 +131,10 @@ public class Solution {
 					x = wormholes.get(idx)[0];
 					y = wormholes.get(idx)[1];
 				}
-//				System.out.println(x + ":" +y);
 				continue;
 			}
 		}
 		
 	}
 	
-	
-	public static int getBlockPosition(int x, int y, int px, int py) {
-		int calX = px - x, calY = py - y;
-		if(calX == 0 && calY < 0) return 2;
-		if(calX == 0 && calY > 0) return 3;
-		if(calY == 0 && calX < 0) return 0;
-		return 1;
-	}
-		
-	public static int meetWall(int x, int y) {
-		// 위로 빠져 나감 
-		if(x < 0) return 1;
-		
-		// 아래로 빠져 나감 
-		if(x >= N) return 0;
-		
-		// 왼쪽으로 빠져 나감 
-		if(y < 0) return 3;
-		
-		return 2;
-	}
 }
