@@ -11,19 +11,11 @@ public class Main {
 			for(int j = 0; j < N - i; j++) {
 				sb.append(" ");
 			}
-			for(int j = 1; j < N + i; j++) {
-				if(j % 2 != 0) {
-					sb.append("*");
-					if(j == i * 2 -1) {
-						break;
-					}
-				}
-				else {	
-					sb.append(" ");
-				}
+			for(int j = 1; j <= i; j++) {
+                sb.append("* ");
 			}
 			sb.append("\n");
 		}
-		System.out.println(sb);
+		System.out.print(sb);
 	}
 }
