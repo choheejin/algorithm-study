@@ -12,7 +12,8 @@ public class Main {
 			for(int j = 0; j < i; j++) {
 				sb.append(" ");
 			}
-			for(int j = 0; j < 2 * N - 1 - (i * 2); j++) {
+			int len = 2 * N - 1 - (i * 2);
+			for(int j = 0; j < len; j++) {
 				sb.append("*");
 			}
 			sb.append("\n");
@@ -22,7 +23,8 @@ public class Main {
 			for(int j = 0; j < i; j++) {
 				sb.append(" ");
 			}
-			for(int j = 0; j < 2 * N - 1 - (i * 2); j++) {
+			int len =  2 * N - 1 - (i * 2);
+			for(int j = 0; j < len; j++) {
 				sb.append("*");
 			}
 			sb.append("\n");
