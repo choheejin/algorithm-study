@@ -7,57 +7,23 @@ public class Main {
 		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(bf.readLine());
 		
-		int odd = 0;
-		int even = 1;
-		
-		for(int i = 1; i <=N; i++) {
-			if(i == N) {
-				sb.append("*");
-				break;
-			} else {
+		for(int i = 1; i <= N; i++) {
+			for(int j = 0; j < N - i; j++) {
 				sb.append(" ");
 			}
-		}
-		sb.append("\n");
-		
-		for(int level = 1; level < N; level++) {
-			int cnt = level % 2 == 0 ? even : odd;
-			
-			for(int a = N - 2; a >= 0; a--) {
-				if(cnt * 2 >= a && (a % 2 != level % 2)) {
+			for(int j = 1; j < N + i; j++) {
+				if(j % 2 != 0) {
 					sb.append("*");
-				} else {					
-					sb.append(" ");
-				}
-			}
-						
-			if(level % 2 == 0) {
-				sb.append("*");
-			} else {
-				sb.append(" ");
-			}
-			
-			int count = level % 2 == 0 ? 1 : 0;
-			for(int a = 0; a <= N - 2; a++) {
-				if(cnt * 2 >= a && (a % 2 != level % 2)) {
-					sb.append("*");
-					if(cnt == count) {
+					if(j == i * 2 -1) {
 						break;
 					}
-					count++;
-				} else {					
+				}
+				else {	
 					sb.append(" ");
 				}
-			}			
-			
+			}
 			sb.append("\n");
-			if(level % 2 == 0) {
-				even++;
-			}
-			else {
-				odd++;
-			}
 		}
-		System.out.print(sb);
+		System.out.println(sb);
 	}
 }
