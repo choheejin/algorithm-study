@@ -1,24 +1,25 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(bf.readLine());
-        int[] arr = Arrays.stream(bf.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        StringTokenizer st = new StringTokenizer(bf.readLine());
 
         int[] dp = new int[N+1];
         int end = 0;
-
         for(int i = 1; i <= N; i++) {
-            if(dp[end] < arr[i - 1]) {
-                dp[++end] = arr[i - 1];
+            int target = Integer.parseInt(st.nextToken());
+            if(dp[end] < target) {
+                dp[++end] = target;
             }
             else {
-                int idx = binary_search(dp, end, arr[i - 1]);
-                dp[idx] = arr[i-1];
+                int idx = binary_search(dp, end, target);
+                dp[idx] = target;
             }
         }
 
