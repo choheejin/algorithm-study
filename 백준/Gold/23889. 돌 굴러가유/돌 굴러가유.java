@@ -68,7 +68,7 @@ public class Main {
 			}
 
 			
-			int sum = dp[points[currPointIdx + 1]] - dp[idx - 1];
+			int sum = dp[points[currPointIdx + 1] - 1] - dp[idx - 1];
 			Wall newWall = new Wall(idx, sum);
 			list.add(newWall);
 			currPointIdx++;
