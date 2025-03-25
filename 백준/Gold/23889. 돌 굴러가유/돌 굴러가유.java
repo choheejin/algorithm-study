@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -16,9 +17,10 @@ import java.util.StringTokenizer;
 
 public class Main {
 	public static class Wall implements Comparable<Wall>{
-		int idx, sum;
+		int idx;
+		long sum;
 		
-		public Wall(int idx, int sum) {
+		public Wall(int idx, long sum) {
 			this.idx = idx;
 			this.sum = sum;
 		}
@@ -30,10 +32,10 @@ public class Main {
 		
 		@Override
 		public int compareTo(Wall o) {
-			if(o.sum == sum) {
-				return Integer.compare(idx, o.idx);
-			}
-			return Integer.compare(o.sum, sum);
+		    if (this.sum == o.sum) {
+		        return Integer.compare(this.idx, o.idx);
+		    }
+		    return Long.compare(o.sum, this.sum);
 		}
 	}
 	
@@ -47,38 +49,35 @@ public class Main {
 		
 		st = new StringTokenizer(br.readLine());
 		
-		int[] dp = new int[N + 1]; // 누적합 
+		long[] dp = new long[N + 1]; // 누적합 
 		for(int i = 1; i <= N; i++) {
 			dp[i] = dp[i-1] + Integer.parseInt(st.nextToken());
 		}
 		
-		int[] points = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-		
-		List<Wall> list = new LinkedList<>();
-		
-		int currPointIdx = 0;
-		
-		while(currPointIdx <= K - 1) {
-			int idx = points[currPointIdx];
-			if(currPointIdx == K - 1) {
-				int sum = idx == N ? dp[N] - dp[N-1] : dp[N] - dp[idx - 1];
-				Wall newWall = new Wall(idx, sum);
-				list.add(newWall);
-				break;
-			}
-
-			
-			int sum = dp[points[currPointIdx + 1] - 1] - dp[idx - 1];
-			Wall newWall = new Wall(idx, sum);
-			list.add(newWall);
-			currPointIdx++;
+		int[] points = new int[K];
+		st = new StringTokenizer(br.readLine());
+		for(int i =0 ; i< K; i++) {
+			points[i] = Integer.parseInt(st.nextToken());
 		}
+		
+		
+		List<Wall> list = new ArrayList<>();
+		
+		
+		for(int i = 0; i < K-1; i++) {
+			long sum = dp[points[i + 1] - 1] - dp[points[i] -1];
+			Wall newWall = new Wall(points[i], sum);
+			list.add(newWall);
+		}
+		
+		long sum = dp[N] - dp[points[K-1]-1];
+		list.add(new Wall(points[K-1],sum));
 		
 		Collections.sort(list);
 //		System.out.println(Arrays.toString(dp));
 //		System.out.println(list);
 		
-		List<Integer> answer = new LinkedList<>();
+		List<Integer> answer = new ArrayList<>();
 		for(int i = 0; i < M; i++) {
 			answer.add(list.get(i).idx);
 		}
