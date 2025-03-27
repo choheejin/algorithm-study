@@ -43,12 +43,13 @@ public class Main {
 	
 	public static boolean check(int r) {
 		Set<String> set = new HashSet<>();
-		for(int i = 0; i < C; i++) {
-			String str = "";
-			for(int j = r; j < R; j++) {
-				str += strs[j][i];
+		for (int i = 0; i < C; i++) {
+			StringBuilder sb = new StringBuilder();
+			for (int j = r; j < R; j++) {
+				sb.append(strs[j][i]);
 			}
-			if(set.contains(str)) {
+			String str = sb.toString();
+			if (set.contains(str)) {
 				return false;
 			}
 			set.add(str);
