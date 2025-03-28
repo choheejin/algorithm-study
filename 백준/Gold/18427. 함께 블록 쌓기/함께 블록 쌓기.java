@@ -14,25 +14,33 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 		H = Integer.parseInt(st.nextToken());
 		
-		int[] dp = new int[H+1];
-				
-		dp[0] = 1;
-		
-		for(int i = 1; i <= N; i++) {
-			int[] nums = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-			int[] next = new int[H+1];
-			System.arraycopy(dp, 0, next, 0, H + 1);
-
-			for(int num : nums) {
-				for(int j = 0; j <= H - num; j++) {
-					next[j + num] = (next[j + num] + dp[j]) % MOD;
-				}
-			}
+		int[][] dp = new int[N + 1][H + 1];
+		int[][] nums = new int[N + 1][M];
 			
-			dp = next;
+		for(int i = 1; i <= N; i++) {
+            st = new StringTokenizer(br.readLine());
+            int idx = 0;
+            while (st.hasMoreTokens()) {
+                nums[i][idx++] = Integer.parseInt(st.nextToken());
+            }
 		}
 		
-		System.out.println(dp[H]);
+        dp[0][0] = 1;
+		
+		for(int i = 1; i <= N; i++) {
+			for(int j = 0; j <= H; j++) {
+				dp[i][j] = (dp[i-1][j] + dp[i][j]) % MOD;
+				for(int num : nums[i]) {
+					if(num == 0) break;
+					if(j >= num) {
+						dp[i][j] = (dp[i][j] + dp[i - 1][j - num]) % MOD;
+					}
+				}
+			}
+//			System.out.println(Arrays.toString(dp[i]));
+		}
+		
+		System.out.println(dp[N][H]);
 	}
 	
 }
