@@ -1,18 +1,17 @@
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Main {
-	static int N, M, H;
-	
+public class Main {	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int MOD = 10_007;
-		N = Integer.parseInt(st.nextToken());
-		M = Integer.parseInt(st.nextToken());
-		H = Integer.parseInt(st.nextToken());
+
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+		int H = Integer.parseInt(st.nextToken());
 		
 		int[][] dp = new int[N + 1][H + 1];
 		int[][] nums = new int[N + 1][M];
@@ -29,11 +28,14 @@ public class Main {
 		
 		for(int i = 1; i <= N; i++) {
 			for(int j = 0; j <= H; j++) {
-				dp[i][j] = (dp[i-1][j] + dp[i][j]) % MOD;
+				dp[i][j] += dp[i-1][j];
+				dp[i][j] %= 10_007;
+				
 				for(int num : nums[i]) {
 					if(num == 0) break;
 					if(j >= num) {
-						dp[i][j] = (dp[i][j] + dp[i - 1][j - num]) % MOD;
+						dp[i][j] += dp[i - 1][j - num];
+						dp[i][j] %= 10_007;
 					}
 				}
 			}
