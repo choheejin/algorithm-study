@@ -1,57 +1,55 @@
-import java.util.*;
-
 class Solution {
-    static int N = 5;
-    
-    public static int makePositive(int a) {
-        if(a == 0) return 0;
-        return a < 0 ? Math.abs(a) : a + N;
-    }
-    
-    public static boolean check(int x, int y) {
-        return x <= 5 && x >= -5 && y <= 5 && y >= -5;
-    }
+    static int[] dx = {0, 0, -2, 2}, dy = {2, -2, 0, 0}; // u, d, l, r
+    static boolean[][] map = new boolean[21][21];
+    static int nx = 10, ny = 10;
     
     public int solution(String dirs) {
-        int nx = 0, ny = 0;
         int answer = 0;
         
-        HashMap<String, Boolean> visited = new HashMap<>();
-        
-        int tmpX = 0;
-        int tmpY = 0;
-        
         for(int i = 0; i < dirs.length(); i++) {
-            char cmd = dirs.charAt(i);
+            int idx = getPosition(dirs.charAt(i));
+            int x = dx[idx] + nx;
+            int y = dy[idx] + ny;
             
-            int x = tmpX, y = tmpY;            
+            int pointX = (nx + x) / 2;
+            int pointY = (ny + y) / 2;
             
-            switch(cmd) {
-                case 'U':
-                    if(!Solution.check(nx - 1, ny)) continue;
-                    nx -= 1;
-                    tmpX = Solution.makePositive(nx);
-                    break;
-                case 'D':
-                    if(!Solution.check(nx + 1, ny)) continue;
-                    nx += 1;
-                    tmpX = Solution.makePositive(nx);
-                    break;
-                case 'L':
-                    if(!Solution.check(nx, ny - 1)) continue;
-                    ny -= 1;
-                    tmpY = Solution.makePositive(ny);
-                    break;
-                case 'R':
-                    if(!Solution.check(nx, ny + 1)) continue;
-                    ny += 1;
-                    tmpY = Solution.makePositive(ny);
-                    break;
+            if(!check(x, y)) continue;
+            
+            if(!map[pointX][pointY]) {
+                map[pointX][pointY] = true;
             }
-            
-            visited.put(x + "," + y + "|" + tmpX + "," + tmpY, true);
-            visited.put(tmpX + "," + tmpY + "|" + x + "," + y, true);
+            nx = x;
+            ny = y;
         }
-        return visited.size() / 2;
+        
+
+        for(int i = 0; i < 21; i++) {
+            for(int j = 0; j < 21; j++) {
+                if(map[i][j]) {
+                    answer++;
+                }
+            }
+        }
+        
+        return answer;
+    }
+    
+    public boolean check(int x, int y) {
+        if(x < 0 || y < 0 || x > 20 || y > 20) return false;
+        return true;
+    }
+    
+    public int getPosition(char op) {
+        if(op == 'U') {
+            return 0;
+        }
+        if(op == 'D') {
+            return 1;
+        }
+        if(op == 'L') {
+            return 2;
+        }
+        return 3;
     }
 }
