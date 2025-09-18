@@ -2,28 +2,28 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] progresses, int[] speeds) {
-        List<Integer> answer = new ArrayList<>();
-        // 남은 작업의 수
-        Queue<Integer> q = new ArrayDeque<>();
+        int[] answer = {};
+        ArrayList<Integer> list = new ArrayList<>();
+        
+        Queue<Integer> q = new ArrayDeque();
         
         for(int i = 0; i < progresses.length; i++) {
-            int tmp = (100 - progresses[i]) / speeds[i];
-            // 나눠 떨어지지 않는 경우 1을 더해준다
+            int p = 100 - progresses[i];
+            int s = speeds[i];
             
-            q.offer((100 - progresses[i]) / (float) speeds[i] != (float) tmp ? tmp + 1 : tmp);
-        }
-
-        while(!q.isEmpty()) {
-            int cnt = 1;
-            int front = q.poll();
-
-            while(!q.isEmpty() && front >= q.peek()) {
-                q.poll();
-                cnt++;
+            int t = (p + s - 1) / s;
+            
+            if(!q.isEmpty() && q.peek() < t) {
+                list.add(q.size());
+                q = new ArrayDeque();
             }
-            answer.add(cnt);
+            q.offer(t);
         }
         
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        if(q.size() > 0) {
+            list.add(q.size());
+        }
+        
+        return list.stream().mapToInt(Integer::intValue).toArray();
     }
 }
