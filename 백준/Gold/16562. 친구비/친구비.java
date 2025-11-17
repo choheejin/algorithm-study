@@ -1,95 +1,72 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-public class Main {	
-	static int N;
-	static boolean[] visited;
-	static ArrayList<Integer>[] list;
+public class Main {
+	static int N, M, K;
+	static int[] costs;
 	
-	public static class Person implements Comparable<Person> {
-		int idx, cost;
-		
-		public Person (int idx, int cost) {
-			this.idx = idx;
-			this.cost = cost;
-		}
-		
-		@Override
-		public int compareTo (Person o) {
-			return Integer.compare(cost, o.cost);
-		}
-
-		@Override
-		public String toString() {
-			return "Person [idx=" + idx + ", cost=" + cost + "]";
-		}		
-	}
+	static ArrayList<Integer>[] list;
+	static boolean[] isVisited;
+	
 	public static void main(String[] args) throws Exception {
-		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in)); 
+		BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 		
 		StringTokenizer st = new StringTokenizer(bf.readLine());
 		
 		N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
-		int K = Integer.parseInt(st.nextToken());
-				
+		M = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		
+		costs = new int[N + 1];
+		list = new ArrayList[N+1];
+		
 		st = new StringTokenizer(bf.readLine());
 		
-		ArrayList<Person> people = new ArrayList();
-		list = new ArrayList[N+1];
-		visited = new boolean[N + 1];
-		
 		for(int i = 1; i <= N; i++) {
-			int cost = Integer.parseInt(st.nextToken());
-			people.add(new Person(i, cost));
-			
-			list[i] = new ArrayList<>();
+			costs[i] = Integer.parseInt(st.nextToken());
+			list[i] = new ArrayList<Integer>();
 		}
-		
-		Collections.sort(people);
 		
 		for(int i = 0; i < M; i++) {
 			st = new StringTokenizer(bf.readLine());
-			int from = Integer.parseInt(st.nextToken());
-			int to = Integer.parseInt(st.nextToken());
 			
-			list[from].add(to);
-			list[to].add(from);
-		}
-				
-		int answer = 0;
-		for(int i = 0; i < N; i++) {
-			Person p = people.get(i);
-			if(visited[p.idx]) continue;
-			if(answer > K) {
-				System.out.println("Oh no");
-				return;
-			}
-			bfs(p.idx);
-			answer += p.cost;
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			
+			list[a].add(b);
+			list[b].add(a);
 		}
 		
-		if(answer > K) {
-			System.out.println("Oh no");
-			return;
-		}
+		isVisited = new boolean[N+1];
+		int result = 0;
 
-		System.out.println(answer);
+		for(int i = 1; i <= N; i++) {
+			if(isVisited[i]) continue;
+			result += dfs(i);
+		}
+		
+		if(result <= K) {
+			System.out.println(result);
+		} else {
+			System.out.println("Oh no");
+		}
 	}
 	
-	public static void bfs(int start) {
-		Queue<Integer> q = new ArrayDeque<>();
-		q.offer(start);
-		visited[start] = true;
+	public static int dfs(int v) {
+		isVisited[v] = true;
 		
-		while(!q.isEmpty()) {
-			int v = q.poll();
-			for(int nxt: list[v]) {
-				if(visited[nxt]) continue;
-				q.offer(nxt);
-				visited[nxt] = true;
-			}
+		int minCost = costs[v];
+		
+		for(int nxt : list[v]) {
+			if(isVisited[nxt]) continue;
+			minCost = Math.min(minCost, dfs(nxt));
 		}
+		
+//		isVisited[v] = false;
+		
+		return minCost;
 	}
 }
