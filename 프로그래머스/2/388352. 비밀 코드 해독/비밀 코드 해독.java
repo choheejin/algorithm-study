@@ -38,9 +38,13 @@ class Solution {
     
     public int guessCode (int i, int status, int cnt, int[] ans) {
         // 비밀코드 완성 완료
-        if(i > N || cnt == 5) {
-            if(cnt != 5) return 0;
+        if(cnt == 5) {
             if(check(status, ans)) return 1;
+            return 0;
+        }
+
+        // 가지치기 - 만들 수 없는 코드, 혹은 앞으로 가능성이 없는 경우
+        if (i > N || cnt + (N - i + 1) < 5) {
             return 0;
         }
         
